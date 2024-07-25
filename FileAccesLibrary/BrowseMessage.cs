@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace FileAccesLibrary
 {
@@ -41,6 +42,23 @@ namespace FileAccesLibrary
 
             _message = head + payload;
 
+        }
+
+        private XElement getResponse() {
+            string payload = _response.Substring(_response.IndexOf("<?xml"));
+            payload = payload.Replace("&lt;", "<");
+            payload = payload.Replace("&gt;", ">");
+            return XElement.Parse(payload);
+        }
+
+        public List<string> getThumbnailURIs() {
+            List<string> result = new List<string>();
+            XElement response = getResponse();
+            var results = response.Descendants().Where(x => x.Name.LocalName == "res");
+            foreach (var res in results) {
+                result.Add(res.Value);
+            }
+            return result;
         }
     }
 }

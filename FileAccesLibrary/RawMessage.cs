@@ -12,6 +12,7 @@ namespace FileAccesLibrary
         private Socket _sender;
 
         protected string _message;
+        protected string _response;
 
         public RawMessage(string ipAddr, int port)
         {
@@ -40,6 +41,9 @@ namespace FileAccesLibrary
                     byteToRead = recievedCount;
                 }
                 Console.WriteLine("Message from Server -> {0}", messageReceived);
+                _response = messageReceived.Replace("&lt;", "<");
+                _response = _response.Replace("&gt;", ">");
+                _response = messageReceived;
             }
             catch (Exception e)
             {
