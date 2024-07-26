@@ -4,10 +4,16 @@ using System.Text;
 
 namespace FileAccesLibrary
 {
+    /// <summary>
+    /// Base class for the HTTP messages sendable to the camera
+    /// </summary>
     public class RawMessage: Message
     {
         private IPAddress _ipAddr;
         private IPEndPoint _localEndPoint;
+        /// <summary>
+        /// The socket object responsible for the sending the messages
+        /// </summary>
         private Socket _sender;
 
         protected string _message;
@@ -25,7 +31,6 @@ namespace FileAccesLibrary
             try
             {
                 _sender.Connect(_localEndPoint);
-                Console.WriteLine("Socket connected to -> {0} ", _sender.RemoteEndPoint.ToString());
                 byte[] messageSent = Encoding.ASCII.GetBytes(message);
                 int byteSent = _sender.Send(messageSent);
                 byte[] messageReceivedBuffer = new byte[2048];
@@ -39,7 +44,7 @@ namespace FileAccesLibrary
                     messageReceived = messageReceived + decodedBuffer;
                     byteToRead = recievedCount;
                 }
-                Console.WriteLine("Message from Server -> {0}", messageReceived);
+                // translate the explicit character definitions
                 _response = messageReceived.Replace("&lt;", "<");
                 _response = _response.Replace("&gt;", ">");
                 _response = messageReceived;
