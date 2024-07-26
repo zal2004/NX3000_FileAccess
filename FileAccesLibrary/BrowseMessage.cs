@@ -46,13 +46,27 @@ namespace FileAccesLibrary
             return XElement.Parse(payload);
         }
 
-        public List<string> getThumbnailURIs() {
-            List<string> result = new List<string>();
+        public IDictionary<string, List<string>> getThumbnailURIs() {
+            Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();
             XElement response = getResponse();
-            var results = response.Descendants().Where(x => x.Name.LocalName == "res");
-            foreach (var res in results) {
-                result.Add(res.Value);
+            var items = response.Descendants().Where(x => x.Name.LocalName == "item");
+
+            foreach (var item in items)
+            {
+                var title = item.Descendants().Where(x => x.Name.LocalName == "title").First().Value;
+                var date = item.Descendants().Where(x => x.Name.LocalName == "date").First().Value;
+
+                var links = item.Descendants().Where(x => x.Name.LocalName == "res");
+                List<string> linksToPicture = new List<string>();
+                foreach(var link in links)
+                {
+                    linksToPicture.Add(link.Value);
+                }
+                result.Add(title, linksToPicture);
+
             }
+
+
             return result;
         }
     }

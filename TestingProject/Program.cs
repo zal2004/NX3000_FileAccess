@@ -18,7 +18,12 @@
 
             foreach (var uri in browseMessage.getThumbnailURIs())
             {
-                Console.WriteLine(uri);
+                Console.WriteLine(uri.Key);
+                foreach(var link in uri.Value)
+                {
+                    Console.Write(link);
+                    Console.Write(" \n");
+                }
             }
         }
     }
