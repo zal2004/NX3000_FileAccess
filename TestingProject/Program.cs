@@ -6,7 +6,7 @@
     {
 
         // Main Method
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var myMAC = "02:00:00:00:00:00";
 
@@ -16,15 +16,14 @@
             BrowseMessage browseMessage = new BrowseMessage("192.168.107.1", 7676, 0, 100);
             browseMessage.Send();
 
-            foreach (var uri in browseMessage.getThumbnailURIs())
+            foreach (var pic in browseMessage.GetPictures())
             {
-                Console.WriteLine(uri.Key);
-                foreach(var link in uri.Value)
-                {
-                    Console.Write(link);
-                    Console.Write(" \n");
-                }
+                Console.WriteLine(pic);
             }
+
+            var pic1 = browseMessage.GetPictures()[0];
+            await pic1.Download(@"C:\Users\zzaal\Pictures");
+
         }
     }
 }

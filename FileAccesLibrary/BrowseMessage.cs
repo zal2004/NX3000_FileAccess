@@ -46,8 +46,8 @@ namespace FileAccesLibrary
             return XElement.Parse(payload);
         }
 
-        public IDictionary<string, List<string>> getThumbnailURIs() {
-            Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();
+        public List<Picture> GetPictures() {
+            List<Picture> result = new List<Picture>();
             XElement response = getResponse();
             var items = response.Descendants().Where(x => x.Name.LocalName == "item");
 
@@ -62,11 +62,9 @@ namespace FileAccesLibrary
                 {
                     linksToPicture.Add(link.Value);
                 }
-                result.Add(title, linksToPicture);
+                result.Add(new Picture(title, DateTime.Parse(date), linksToPicture[0], linksToPicture[1], linksToPicture[2]));
 
             }
-
-
             return result;
         }
     }
