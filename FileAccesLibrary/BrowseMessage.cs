@@ -46,8 +46,8 @@ namespace FileAccesLibrary
             return XElement.Parse(payload);
         }
 
-        public List<Picture> GetPictures() {
-            List<Picture> result = new List<Picture>();
+        public List<IMedia> GetPictures() {
+            List<IMedia> result = new List<IMedia>();
             XElement response = getResponse();
             var items = response.Descendants().Where(x => x.Name.LocalName == "item");
 
@@ -58,11 +58,19 @@ namespace FileAccesLibrary
 
                 var links = item.Descendants().Where(x => x.Name.LocalName == "res");
                 List<string> linksToPicture = new List<string>();
-                foreach(var link in links)
+                var protocolInfo = links.First().Attribute("protocolInfo").Value;
+                string type = protocolInfo.Substring(protocolInfo.IndexOf("http-get:*:") + "http-get:*:".Length, protocolInfo.IndexOf("/") - protocolInfo.IndexOf("http-get:*:") - "http-get:*:".Length);
+                string extension = protocolInfo.Substring(protocolInfo.IndexOf("/") + 1, protocolInfo.IndexOf(":DLNA.ORG") - protocolInfo.IndexOf("/") - 1);
+
+                foreach (var link in links)
                 {
                     linksToPicture.Add(link.Value);
                 }
-                result.Add(new Picture(title, DateTime.Parse(date), linksToPicture[0], linksToPicture[1], linksToPicture[2]));
+
+                if(type == "image") { result.Add(new Picture(title, DateTime.Parse(date), linksToPicture[0], linksToPicture[1], linksToPicture[2], extension)); }
+                else if(type == "video") { result.Add(new Video(title, DateTime.Parse(date), linksToPicture[0], linksToPicture[1], extension)); }
+                else { throw new NotSupportedException(); }
+                
 
             }
             return result;
