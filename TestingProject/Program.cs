@@ -22,7 +22,7 @@
             }
 
             var pic1 = browseMessage.GetPictures()[0];
-            await pic1.Download(@"C:\Users\zzaal\Pictures");
+            await pic1.Download(@"[DEST DIR PATH]");
 
         }
     }

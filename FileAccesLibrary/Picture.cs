@@ -8,24 +8,24 @@ namespace FileAccesLibrary
 {
     public class Picture
     {
-        private string _title;
-        private DateTime _date;
-        private string _thumbnailURI;
-        private string _screenImageURI;
-        private string _fullImageURI;
+        public string Title { get; set; }
+        public DateTime Date { get; set; }
+        public string ThumbnailURI { get; set; }
+        public string ScreenImageURI { get; set; }
+        public string FullImageURI { get; set; }
 
         public Picture(string title, DateTime date, string fullImageURI, string thumbnailURI, string screenImageURI)
         {
-            _title = title;
-            _date = date;
-            _fullImageURI = fullImageURI;
-            _thumbnailURI = thumbnailURI;
-            _screenImageURI = screenImageURI;
+            Title = title;
+            Date = date;
+            FullImageURI = fullImageURI;
+            ThumbnailURI = thumbnailURI;
+            ScreenImageURI = screenImageURI;
         }
 
         public override string ToString()
         {
-            return _title + " " + _date.ToString();
+            return Title + " " + Date.ToString();
         }
 
         public async Task Download(string dest)
@@ -33,19 +33,11 @@ namespace FileAccesLibrary
             // Download the image from the URI
             using(var client = new HttpClient())
             {
-                var response = await client.GetAsync(_fullImageURI);
+                var response = await client.GetAsync(FullImageURI);
                 response.EnsureSuccessStatusCode();
                 string destPath;
-                if(dest == "")
-                {
-                    destPath = "/" + _title;
-                }
-                else
-                {
-                    destPath = dest + "/" + _title;
-                }
+                destPath = Path.Combine(dest, Title + ".jpg");
 
-                destPath = destPath + ".jpg";
                 using(var fileStream = new FileStream(destPath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     await response.Content.CopyToAsync(fileStream);
