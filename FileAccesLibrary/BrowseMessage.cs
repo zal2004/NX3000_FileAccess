@@ -46,7 +46,7 @@ namespace FileAccesLibrary
             return XElement.Parse(payload);
         }
 
-        public List<IMedia> GetPictures() {
+        public List<IMedia> GetContents() {
             List<IMedia> result = new List<IMedia>();
             XElement response = getResponse();
             var items = response.Descendants().Where(x => x.Name.LocalName == "item");
