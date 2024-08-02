@@ -15,5 +15,7 @@ namespace FileAccesLibrary
         public string Extension { get; set; }
 
         public Task Download(string dest);
+        public Task Download(string dest, Action completedEventHandler);
+
     }
 }
