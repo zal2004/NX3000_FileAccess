@@ -16,13 +16,12 @@
             BrowseMessage browseMessage = new BrowseMessage("192.168.107.1", 7676, 0, 100);
             browseMessage.Send();
 
-            foreach (var pic in browseMessage.GetPictures())
+            foreach (var pic in browseMessage.GetContents())
             {
                 Console.WriteLine(pic);
             }
 
-            var pic1 = browseMessage.GetPictures()[0];
-            await pic1.Download(@"[DEST DIR PATH]");
+            var pic1 = browseMessage.GetContents()[0];
 
         }
     }
